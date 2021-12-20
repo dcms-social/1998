@@ -1,4 +1,7 @@
 <?php
+require_once "home.php";
+require_once  H.'sys/inc/mysql2i.class.php';
+
 // авторизация на сервере базы
 if(!($db = @mysql_connect($set['mysql_host'], $set['mysql_user'], $set['mysql_pass'])))
 {

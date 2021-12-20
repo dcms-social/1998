@@ -107,120 +107,109 @@ exit;
 
 */
 
-if (isset($_GET['spam'])  &&  $ank['id'] != 0)
-
-{
-
-$mess = dbassoc(dbquery("SELECT * FROM `mail` WHERE `id` = '".intval($_GET['spam'])."' limit 1"));
-
-$spamer = get_user($mess['id_user']);
-
-if (dbresult(dbquery("SELECT COUNT(*) FROM `spamus` WHERE `id_user` = '$user[id]' AND `id_spam` = '$spamer[id]' AND `razdel` = 'mail'"),0)==0)
-
-{
-
-if (isset($_POST['msg']))
-
-{
-
-if ($mess['id_kont']==$user['id'])
-
-{
-
-$msg=mysql_real_escape_string($_POST['msg']);
+if (isset($_GET['spam'])  &&  $ank['id'] != 0) {
+  $mess = dbassoc(dbquery("SELECT * FROM `mail` WHERE `id` = '" . intval($_GET['spam']) . "' limit 1"));
 
 
+  if ($mess['id_kont']==$user['id'])
 
-if (strlen2($msg)<3)$err='Укажите подробнее причину жалобы';
+  {
 
-if (strlen2($msg)>1512)$err='Длина текста превышает предел в 512 символов';
+  $spamer = get_user($mess['id_user']);
 
+  if (dbresult(dbquery("SELECT COUNT(*) FROM `spamus` WHERE `id_user` = '$user[id]' AND `id_spam` = '$spamer[id]' AND `razdel` = 'mail'"), 0) == 0) {
 
+    if (isset($_POST['msg'])) {
 
-if(isset($_POST['types'])) $types=intval($_POST['types']);
+      if ($mess['id_kont'] == $user['id']) {
 
-else $types='0'; 
-
-if (!isset($err))
-
-{
-
-dbquery("INSERT INTO `spamus` (`id_user`, `msg`, `id_spam`, `time`, `types`, `razdel`, `spam`) values('$user[id]', '$msg', '$spamer[id]', '$time', '$types', 'mail', '".my_esc($mess['msg'])."')");
-
-$_SESSION['message'] = 'Заявка на рассмотрение отправлена'; 
-
-header("Location: ?id=$ank[id]&spam=$mess[id]");
-
-exit;
-
-}
-
-}
-
-}
-
-}
-
-aut();
-
-err();
+        $msg = mysql_real_escape_string($_POST['msg']);
 
 
+        if (strlen2($msg) < 3) $err = 'Укажите подробнее причину жалобы';
 
-if (dbresult(dbquery("SELECT COUNT(*) FROM `spamus` WHERE `id_user` = '$user[id]' AND `id_spam` = '$spamer[id]' AND `razdel` = 'mail'"),0)==0)
+        if (strlen2($msg) > 1512) $err = 'Длина текста превышает предел в 512 символов';
 
-{
 
-echo "<div class='mess'>Ложная информация может привести к блокировке ника. 
+        if (isset($_POST['types'])) $types = intval($_POST['types']);
+
+        else $types = '0';
+
+        if (!isset($err)) {
+
+          dbquery("INSERT INTO `spamus` (`id_user`, `msg`, `id_spam`, `time`, `types`, `razdel`, `spam`) values('$user[id]', '$msg', '$spamer[id]', '$time', '$types', 'mail', '" . my_esc($mess['msg']) . "')");
+
+          $_SESSION['message'] = 'Заявка на рассмотрение отправлена';
+
+          header("Location: ?id=$ank[id]&spam=$mess[id]");
+
+          exit;
+
+        }
+
+      }
+
+    }
+
+  }
+
+  aut();
+
+  err();
+
+
+  if (dbresult(dbquery("SELECT COUNT(*) FROM `spamus` WHERE `id_user` = '$user[id]' AND `id_spam` = '$spamer[id]' AND `razdel` = 'mail'"), 0) == 0) {
+
+    echo "<div class='mess'>Ложная информация может привести к блокировке ника. 
 
 Если вас постоянно достает один человек - пишет всякие гадости, вы можете добавить его в черный список.</div>";
 
-echo "<form class='nav1' method='post' action='/mail.php?id=$ank[id]&amp;spam=$mess[id]'>\n";
+    echo "<form class='nav1' method='post' action='/mail.php?id=$ank[id]&amp;spam=$mess[id]'>\n";
 
-echo "<b>Пользователь:</b> ";
+    echo "<b>Пользователь:</b> ";
 
-echo " ".status($spamer['id'])." <a href=\"/info.php?id=$spamer[id]\">$spamer[nick]</a>\n";
+    echo " " . status($spamer['id']) . " <a href=\"/info.php?id=$spamer[id]\">$spamer[nick]</a>\n";
 
-echo "".medal($spamer['id'])." ".online($spamer['id'])." (".vremja($mess['time']).")<br />";
+    echo "" . medal($spamer['id']) . " " . online($spamer['id']) . " (" . vremja($mess['time']) . ")<br />";
 
-echo "<b>Нарушение:</b> <font color='green'>".output_text($mess['msg'])."</font><br />";
+    echo "<b>Нарушение:</b> <font color='green'>" . output_text($mess['msg']) . "</font><br />";
 
-echo "Причина:<br />\n<select name='types'>\n";
+    echo "Причина:<br />\n<select name='types'>\n";
 
-echo "<option value='1' selected='selected'>Спам/Реклама</option>\n";
+    echo "<option value='1' selected='selected'>Спам/Реклама</option>\n";
 
-echo "<option value='2' selected='selected'>Мошенничество</option>\n";
+    echo "<option value='2' selected='selected'>Мошенничество</option>\n";
 
-echo "<option value='3' selected='selected'>Оскорбление</option>\n";
+    echo "<option value='3' selected='selected'>Оскорбление</option>\n";
 
-echo "<option value='0' selected='selected'>Другое</option>\n";
+    echo "<option value='0' selected='selected'>Другое</option>\n";
 
-echo "</select><br />\n";
+    echo "</select><br />\n";
 
-echo "Комментарий:";
+    echo "Комментарий:";
 
-echo $tPanel."<textarea name=\"msg\"></textarea><br />";
+    echo $tPanel . "<textarea name=\"msg\"></textarea><br />";
 
-echo "<input value=\"Отправить\" type=\"submit\" />\n";
+    echo "<input value=\"Отправить\" type=\"submit\" />\n";
 
-echo "</form>\n";
+    echo "</form>\n";
 
-}else{
+  } else {
 
-echo "<div class='mess'>Жалоба на <font color='green'>$spamer[nick]</font> будет рассмотрена в ближайшее время.</div>";
+    echo "<div class='mess'>Жалоба на <font color='green'>$spamer[nick]</font> будет рассмотрена в ближайшее время.</div>";
 
+  }
+
+
+  echo "<div class='foot'>\n";
+
+  echo "<img src='/style/icons/str2.gif' alt='*'> <a href='/mail.php?id=$ank[id]'>Назад</a><br />\n";
+
+  echo "</div>\n";
+
+  include_once TFOOT;
 }
-
-
-
-echo "<div class='foot'>\n";
-
-echo "<img src='/style/icons/str2.gif' alt='*'> <a href='/mail.php?id=$ank[id]'>Назад</a><br />\n";
-
-echo "</div>\n";
-
-include_once TFOOT;
-
+  else header("Location: /mail.php");
 }
 
 /*
