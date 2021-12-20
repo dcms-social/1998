@@ -351,3 +351,17 @@ function csrf_token_new ()
 
 
 }
+
+function ages($age) {
+  $str='';
+  $num=$age>100 ? substr($age, -2) : $age;
+  if($num>=5&&$num<=14) $str = "лет";
+  else
+  {
+    $num=substr($age, -1);
+    if($num==0||($num>=5&&$num<=9)) $str='лет';
+    if($num==1) $str='год';
+    if($num>=2&&$num<=4) $str='года';
+  }
+  return $age.' '.$str;
+}

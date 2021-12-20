@@ -195,7 +195,7 @@ else $avatar = $avatars[$user];
 		*/
 		
 		global $user;
-
+    static $users;
 
 
 		$ank=array();
@@ -210,7 +210,7 @@ else $avatar = $avatars[$user];
 		}
 		else
 		{
-      static $users = [];
+
       if (empty($users[$ID]))
       {
         // Иначе выбираем из базы
@@ -218,7 +218,7 @@ else $avatar = $avatars[$user];
         $users[$ID] = $ank;
       }
 
-      else $ank = $users[$user];
+      else $ank = $users[$ID];
 
 
 
@@ -267,7 +267,7 @@ else $avatar = $avatars[$user];
 		}
 		
 		// Вывод значка онлайн
-		if ($ID != 0 && $ank['date_last'] > time()-600)
+		if (isset($ank['date_last']) && $ID != 0 && $ank['date_last'] > time()-600)
 		{
 			if ($ank['browser'] == 'wap')
 				$ank['online'] = ' <img src="/style/icons/online.gif" alt="WAP" /> ';
@@ -280,7 +280,8 @@ else $avatar = $avatars[$user];
 		}
 		
 		// Вывод медали
-		$R = $ank['rating'];
+    if (isset($ank['rating'])) $R = $ank['rating'];
+    else $R = 0;
 		
 		if ($R >= 6)
 		{
@@ -340,9 +341,11 @@ else $avatar = $avatars[$user];
 			}
 		}
 
-		
-		$ank['link'] = ' <a href="/id' . $ID . '">' . text($ank['nick']) . '</a> ';
-		$ank['nick'] = text($ank['nick']);
+
+    if (isset($ank['link'])) 	$ank['link'] = ' <a href="/id' . $ID . '">' . text($ank['nick']) . '</a> ';
+    else $ank['link'] = null;
+		 if (isset($ank['nick'])) $ank['nick'] = text($ank['nick']);
+		 else $ank['nick'] = null;
 		
 		return $ank;
 	}

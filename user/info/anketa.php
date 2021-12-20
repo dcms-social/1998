@@ -360,7 +360,7 @@ echo "$date<span class=\"ank_n\">Дата рождения:</span>$a $ank[ank_d_
 $ank['ank_age']=date("Y")-$ank['ank_g_r'];
 if (date("n")<$ank['ank_m_r'])$ank['ank_age']=$ank['ank_age']-1;
 elseif (date("n")==$ank['ank_m_r']&& date("j")<$ank['ank_d_r'])$ank['ank_age']=$ank['ank_age']-1;
-echo "<span class=\"ank_n\">Возраст:</span> $ank[ank_age] \n";
+echo "<span class=\"ank_n\">Возраст:</span> ".ages($ank['ank_age'])." \n";
 }
 elseif($ank['ank_d_r']!=NULL && $ank['ank_m_r']!=NULL)
 {
