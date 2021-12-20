@@ -12,7 +12,7 @@ else if ($type=='status_like' && $post['avtor'] == $user['id'])
 }
 else if ($type=='status' && $post['avtor'] != $user['id'])
 {
-	$name = 'установил' . ($avtor['pol'] == 1 ? null : "а") . ' новый статус';
+	$name = ' установил' . ($avtor['pol'] == 1 ? null : "а") . ' новый статус ';
 }
 
 
