@@ -14,7 +14,7 @@ ICQ: 587863132
 http://dcms-social.ru
 =======================================
 */
-
+if (!defined("USER")) die('No access');
 
 $set['title'] = text($dir['name']);
 

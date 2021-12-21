@@ -14,6 +14,7 @@ ICQ: 587863132
 http://dcms-social.ru
 =======================================
 */
+if (!defined("USER")) die('No access');
 $k_post=dbresult(dbquery("SELECT COUNT(*) FROM `obmennik_komm` WHERE `id_file` = '$file_id[id]'"),0);
 $k_page=k_page($k_post,$set['p_str']);
 $page=page($k_page);

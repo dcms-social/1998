@@ -25,6 +25,8 @@ include_once FNC;
 include_once USER;
 include_once '../../sys/inc/files.php';
 
+
+
 /* Бан пользователя */ 
 if (dbresult(dbquery("SELECT COUNT(*) FROM `ban` WHERE `razdel` = 'files' AND `id_user` = '$user[id]' AND (`time` > '$time' OR `view` = '0' OR `navsegda` = '1')"), 0)!=0)
 {

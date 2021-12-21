@@ -14,9 +14,25 @@ ICQ: 587863132
 http://dcms-social.ru
 =======================================
 */
+if (!defined("USER")) die('No access');
+
+
+
+
+
+
+
 
 if (isset($_GET['edit']))
 {
+
+  if (empty($file_id['id_user']) or empty($user['id'])  or  $file_id['id_user']!=$ank['id'])
+  {
+    echo "ss";
+   // header("Location: /?".SID);
+    exit;
+  }
+
 	if (isset($_GET['ok']))
 	{
 		$name = my_esc($_POST['name']);

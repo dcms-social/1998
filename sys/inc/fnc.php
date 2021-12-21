@@ -136,6 +136,7 @@ return $text;}
 // получаем данные пользователя и уровень прав (+ кеширование)
 function get_user($user_id=0)
 {
+  static $users; // переменная не удаляется после вызова функции
 if ($user_id==0)
 {
 // бот
@@ -148,13 +149,16 @@ $ank2['ank_o_sebe']='Создан для уведомлений';return $ank2;
 }
 else
 {
-static $users; // переменная не удаляется после вызова функции
+
 $user_id=intval($user_id);
 $users[0]=false;
 if (!isset($users[$user_id])){
-if (dbresult(dbquery("SELECT COUNT(*) FROM `user` WHERE `id` = '$user_id'"),0)==1)
+  $users[$user_id]=dbassoc(dbquery("SELECT * FROM `user` WHERE `id` = '$user_id' LIMIT 1"));
+
+  if ($users[$user_id]['id']!=0)
 {
-$users[$user_id]=dbassoc(dbquery("SELECT * FROM `user` WHERE `id` = '$user_id' LIMIT 1"));
+
+
 $tmp_us=dbassoc(dbquery("SELECT `level`,`name` AS `group_name` FROM `user_group` WHERE `id` = '".$users[$user_id]['group_access']."' LIMIT 1"));
 
 if ($tmp_us['group_name']==null or  !isset($tmp_us) ) {
