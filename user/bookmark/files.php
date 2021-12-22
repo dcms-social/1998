@@ -181,7 +181,7 @@ echo '</div>';
 
 
 
-$k_post=dbresult(dbquery("SELECT COUNT(id) FROM `bookmarks` WHERE `id_user` = '$ank[id]' "),0);
+$k_post=dbresult(dbquery("SELECT COUNT(id) FROM `bookmarks` WHERE `id_user` = '$ank[id]' AND `type`='file' "),0);
 
 
 

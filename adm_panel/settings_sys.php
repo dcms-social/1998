@@ -81,8 +81,8 @@ echo "Пунктов на страницу:<br />\n<input name=\"p_str\" value=\
 echo "Выход с подтверждением:<br />\n
 
 <select name='exit'>
-  <option ".(setget('exit')==1? " selected ":null)." value='1'>Да</option>
-  <option ".(setget('exit')==0? " selected ":null)." value='0'>Нет</option>
+  <option ".(setget('exit',1)==1? " selected ":null)." value='1'>Да</option>
+  <option ".(setget('exit',1)==0? " selected ":null)." value='0'>Нет</option>
 </select>
 
 <br />\n";
