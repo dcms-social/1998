@@ -71,18 +71,27 @@ $name=my_esc($_POST['name']);
 $msg=my_esc($_POST['msg']);
 
 
-if ($user['level']>0){
-if (isset($_POST['up']) && $_POST['up']==1 AND $them['up']!=1)
-{
-if ($ank2['id']!=$user['id'])admin_log('Форум','Параметры темы',"Закрепление темы '[url=/forum/$forum[id]/$razdel[id]/$them[id]/]$them[name][/url]' (автор '[url=/info.php?id=$ank2[id]]$ank2[nick][/url]', раздел '$razdel[name]')");
-$up=1;
+if ($user['level']>0) {
+  if (isset($_POST['up']) && $_POST['up'] == 1 and $them['up'] != 1) {
+    if ($ank2['id'] != $user['id']) admin_log('Форум', 'Параметры темы', "Закрепление темы '[url=/forum/$forum[id]/$razdel[id]/$them[id]/]$them[name][/url]' (автор '[url=/info.php?id=$ank2[id]]$ank2[nick][/url]', раздел '$razdel[name]')");
+    $up = 1;
 
-/* PluginS Dcms-Social.Ru */
-$msgg='[red]Тему закрепил '.$user['group_name'].' '.$user['nick'].'[/red]';
-dbquery("INSERT INTO `forum_p` (`id_forum`, `id_razdel`, `id_them`, `id_user`, `msg`, `time`) values('$forum[id]', '$razdel[id]', '$them[id]', '0', '".my_esc($msgg)."', '$time')");
-/*тут конец*/
-}
-else $up=0;
+    /* PluginS Dcms-Social.Ru */
+    $msgg = '[red]Тему закрепил ' . $user['group_name'] . ' ' . $user['nick'] . '[/red]';
+    dbquery("INSERT INTO `forum_p` (`id_forum`, `id_razdel`, `id_them`, `id_user`, `msg`, `time`) values('$forum[id]', '$razdel[id]', '$them[id]', '0', '" . my_esc($msgg) . "', '$time')");
+    /*тут конец*/
+  }
+  else
+  {
+    if ($them['up']== 1) $up=1;
+   else $up=0;
+  }
+  if (!isset($_POST['up']) and $them['up'] == 1) {
+    $msgg = '[red]Тему открепил ' . $user['group_name'] . ' ' . $user['nick'] . '[/red]';
+    dbquery("INSERT INTO `forum_p` (`id_forum`, `id_razdel`, `id_them`, `id_user`, `msg`, `time`) values('$forum[id]', '$razdel[id]', '$them[id]', '0', '" . my_esc($msgg) . "', '$time')");
+    $up=0;
+  }
+
 $add_q=" `up` = '$up',";
 }
 else $add_q=NULL;
