@@ -3,7 +3,7 @@ function img_preg($arr)
 {
 	if (@imagecreatefromstring(file_get_contents($arr[1])))
 	{
-		return '<a href="http://' . $_SERVER['HTTP_HOST'] . '/go.php?go='.base64_encode(html_entity_decode($arr[1])) . '"><img style="max-width:240px;" src="http://' . $_SERVER['HTTP_HOST'] . '/go.php?go=' . base64_encode(html_entity_decode($arr[1])) . '" alt="img" /></a>';		
+		return '<a href="http://' . $_SERVER['HTTP_HOST'] . '/go.php?go='.base64_encode(html_entity_decode($arr[1])) . '"><img style="max-width:240px; max-height:320px;" src="http://' . $_SERVER['HTTP_HOST'] . '/go.php?go=' . base64_encode(html_entity_decode($arr[1])) . '" alt="img" /></a>';
 	}
 	else
 	{
