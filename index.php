@@ -59,7 +59,7 @@ if (!$set['web'])
 else
 {
 	// главная web темы
-	include_once 'style/themes/' . $set['set_them'] . '/index.php'; 
+	include_once 'style/themes/' . $set['set_them'] . '/index.php';
 }
 include_once TFOOT;
 ?>

@@ -10,7 +10,6 @@ include_once IPUA;
 include_once FNC;
 include_once ADM_CHECK;
 include_once USER;
-user_access('adm_set_sys',null,'index.php?'.SID);
 adm_check();
 
 $set['title']='Настройки системы';

@@ -161,7 +161,7 @@ if (!isset($users[$user_id])){
 
 $tmp_us=dbassoc(dbquery("SELECT `level`,`name` AS `group_name` FROM `user_group` WHERE `id` = '".$users[$user_id]['group_access']."' LIMIT 1"));
 
-if ($tmp_us['group_name']==null or  !isset($tmp_us) ) {
+if (  !isset($tmp_us) or empty( $tmp_us['group_name']) ) {
 $users[$user_id]['level']=0;
 $users[$user_id]['group_name']='Пользователь';
 }

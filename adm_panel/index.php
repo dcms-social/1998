@@ -8,11 +8,13 @@ include_once DB_CONNECT;
 include_once IPUA;
 include_once FNC;
 include_once ADM_CHECK;
-include_once USER;user_access('adm_panel_show',null,'/index.php?'.SID);
+include_once USER;
+
+user_access('adm_panel_show',null,'/index.php?'.SID);
 		   
 if (isset($_SESSION['adm_auth']) && $_SESSION['adm_auth']>$time || isset($_SESSION['captcha']) && isset($_POST['chislo']) && $_SESSION['captcha']==$_POST['chislo'])
 {
-$_SESSION['adm_auth']=$time+600;
+$_SESSION['adm_auth']=$time+1000;
 
 if (isset($_GET['go']) && $_GET['go']!=null)
 {
@@ -35,6 +37,7 @@ if (user_access('adm_menu'))echo "<div class='main'><img src='/style/icons/str.g
 if (user_access('adm_rekl'))echo "<div class='main'><img src='/style/icons/str.gif' alt=''/> <a href='rekl.php'>Реклама</a></div>\n";
 if (user_access('adm_news'))echo "<div class='main'><img src='/style/icons/str.gif' alt=''/> <a href='/news/add.php'>Новости</a></div>\n";
 if (user_access('adm_set_sys'))echo "<div class='main'><img src='/style/icons/str.gif' alt=''/> <a href='settings_sys.php'>Настройки системы</a></div>\n";
+  if (user_access('adm_set_sys'))echo "<div class='main'><img src='/style/icons/str.gif' alt=''/> <a href='rights.php'>Права на папки</a></div>\n";
 if (user_access('adm_set_sys'))echo "<div class='main'><img src='/style/icons/str.gif' alt=''/> <a href='settings_bbcode.php'>Настройки BBcode</a></div>\n";
 if ($user['level'] > 3)echo "<div class='main'><img src='/style/icons/str.gif' alt=''/> <a href='/user/gift/create.php'>Подарки</a></div>\n";
 if ($user['level'] > 3)echo "<div class='main'><img src='/style/icons/str.gif' alt=''/> <a href='smiles.php'>Смайлы</a></div>\n";
