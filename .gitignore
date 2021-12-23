@@ -1,4 +1,6 @@
 /sys/dat/shif_iv.dat
 /sys/dat/settings_6.2.dat
-!/launcher.php
-!/replace.php
+/launcher.php
+/replace.php
+/.idea
+
