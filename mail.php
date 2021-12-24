@@ -487,8 +487,8 @@ else
 $rt=time()-600;
 if (isset($ank['date_last'])) {
   if ($ank['date_last'] < $rt) {
-    echo "<div class='plug'>";
-    echo "Пользователь " . $ank['nick'] . " не в сети. Оставьте свое сообщение и он прочтет его позже.";
+    echo "<div class='mess'>";
+    echo "Пользователь <strong>" . $ank['nick'] . "</strong> не в сети. Оставьте свое сообщение и он прочтет его позже.";
     echo "</div>";
   }
 }

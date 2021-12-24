@@ -20,20 +20,21 @@ if (function_exists('error_reporting'))@error_reporting(0); // отключае�
 if (function_exists('set_time_limit'))@set_time_limit(60);
 if (function_exists('ini_set'))
 {
-  /*
+
 ini_set('display_errors',false); // отключаем показ ошибок
 ini_set('register_globals', false); // вырубаем глобальные переменные
 ini_set('session.use_cookies', true); // используем куки для сессий
 ini_set('session.use_trans_sid', true); // используем url для передачи сессий
 ini_set('arg_separator.output', "&amp;"); // разделитель переменных в url (для соответствия с xml)
-*/
-  }
 
+  }
+/*
 ini_set('error_reporting', E_ALL);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 ini_set('session.use_trans_sid', 1);
 ini_set('arg_separator.output', "&amp;");
+*/
 
 // принудительно вырубаем глобальные переменные
 if (ini_get('register_globals')) {
