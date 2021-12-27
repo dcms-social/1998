@@ -1,8 +1,7 @@
-
 CREATE TABLE IF NOT EXISTS `status` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_user` int(11) DEFAULT NULL,
-  `msg` int(11) DEFAULT NULL,
+  `msg` varchar(1024) NOT NULL,
   `like` int(11) DEFAULT NULL,
   `time` int(11) DEFAULT NULL,
   `pokaz` int(11) DEFAULT NULL,
