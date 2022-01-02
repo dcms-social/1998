@@ -53,7 +53,10 @@ $temp_set['meta_keywords']=esc(stripcslashes(htmlspecialchars($_POST['meta_keywo
 $temp_set['meta_description']=esc(stripcslashes(htmlspecialchars($_POST['meta_description'])),1);
 
   $temp_set['exit']=intval($_POST['exit']);
-  $temp_set['exit2']=intval($_POST['exit2']);
+  $temp_set['replace']=intval($_POST['replace']);
+  $temp_set['header']=esc(stripcslashes(htmlspecialchars(($_POST['header']))));
+
+
   header( "Location: " . $_SERVER [ "REQUEST_URI" ]);
 
 
@@ -86,6 +89,24 @@ echo "Выход с подтверждением:<br />\n
 
 <br />\n";
 
+echo "Шапка сайта:<br />\n
+
+<select name='header'>
+  <option ".(setget('header',"index")=="index"? " selected ":null)." value='index'>Только на главной</option>
+  <option ".(setget('header',"all")=="all"? " selected ":null)." value='all'>На всех страницах</option>
+</select>
+
+<br />\n";
+
+
+echo "  Установка плагинов через папку /Raplace/:<br />\n
+
+<select name='header'>
+  <option ".(setget('replace',1)==1? " selected ":null)." value='1'>Включено</option>
+  <option ".(setget('replace',1)==0? " selected ":null)." value='0'>Отключено</option>
+</select>
+
+<br />\n";
 
 
 echo "Тема (WAP):<br />\n<select name='set_them'>\n";

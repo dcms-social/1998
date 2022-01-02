@@ -22,7 +22,7 @@ if(isset($_GET['step']) && $_GET['step']=='5')
 {
 
 
-$tmp_set['title']=strtoupper($_SERVER['HTTP_HOST']).' - Главная';
+$tmp_set['title']=strtoupper($_SERVER['HTTP_HOST']).'';
 $tmp_set['mysql_host']=$_SESSION['host'];
 $tmp_set['mysql_user']=$_SESSION['user'];
 $tmp_set['mysql_pass']=$_SESSION['pass'];

@@ -11,8 +11,11 @@ foreach ($includes as $file) {
   $file_constant = mb_strtoupper(str_replace(".php", "", $file));
 
   if (!defined(mb_strtoupper($file_constant))) {
-    if (file_exists(REPLACE . $file_path)) define($file_constant, REPLACE . $file_path);
-    else define($file_constant, H . $file_path);
+    if (setget('replace',1)==1) {
+
+      if (file_exists(REPLACE . $file_path)) define($file_constant, REPLACE . $file_path);
+      else define($file_constant, H . $file_path);
+    } else  define($file_constant, H . $file_path);
   }
 
 }
@@ -31,8 +34,10 @@ function check_replace($source2)
   $replace = str_ireplace(DIRECTORY_SEPARATOR, "/", REPLACE);
   $replace_file = str_ireplace($h, $replace, (string)$source);
 
-  if (file_exists($replace_file)) return $replace_file;
-  else return $source;
+  if (setget('replace',1)==1) {
+    if (file_exists($replace_file)) return $replace_file;
+    else return $source;
+  }  else return $source;
 
 
 }
@@ -62,6 +67,19 @@ function check_file($source)
 
 
 }
+
+
+function setget($name, $default=null)
+{
+  global $set;
+  if (!isset($set[$name]))
+  {
+    if ($default===null)  $set[$name]= null;
+    else $set[$name]= $default;
+  }
+  return $set[$name];
+}
+
 
 
 $num = 0;

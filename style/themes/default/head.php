@@ -25,7 +25,7 @@ if (isset($_SESSION['message']))
 	$_SESSION['message'] = NULL;
 }
 
-if ($_SERVER['PHP_SELF'] == '/index.php')
+if ((setget('header',"index")=="index" and $_SERVER['PHP_SELF'] == '/index.php') or setget('header',"index")=="all" )
 {
 	?>
 	<center>

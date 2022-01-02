@@ -33,17 +33,6 @@ $webbrowser = true;else $webbrowser = false; // определение типа 
 
 $set['web'] = false;
 
-function setget($name, $default=null)
-{
-  global $set;
-  if (!isset($set[$name]))
-  {
-    if ($default===null)  $set[$name]= null;
-    else $set[$name]= $default;
-  }
-  return $set[$name];
-}
-
 function setset($name, $value=null)
 {
   global $set;

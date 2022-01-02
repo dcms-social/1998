@@ -20,13 +20,13 @@ echo "</form>";
 		<center>				<div class="mess">
 		<b>Добро пожаловать в мастер установки DCMS-Social!</b><br />
 		</div>				<div class="nav2">
-		<font color='green'>Текущая версия: DCMS-Social v<?echo $set['dcms_version'];?> beta</font>		</div>		<div class="mess">
+		<font color='green'>Устанавливаемая версия: DCMS-Social v<?echo $set['dcms_version'];?></font>		</div>		<div class="mess">
 		<font color='red'>Перед началом установки, рекомендуем проверить наличие более новой версии на оф. сайте <a href="http://dcms-social.ru">Dcms-Social.Ru</a></font>
 		</div>				</center>		<div class="nav2">
-	-	Официальный сайт поддержки DCMS-Social - <a target="_blank" href="http://dcms-social.ru">Dcms-Social.Ru</a><br />
+	-	Официальный сайт поддержки DCMS-Social - <a target="_blank" href="https://dcms-social.ru">Dcms-Social.Ru</a><br />
 	-  Наиболее безопасным источником для скачивания движка считается  вышеуказанный официальный сайт<br />
-	-   Об ошибках и недоработках просьба сообщать на <a target="_blank" href="http://dcms-social.ru/forum/">форум</a><br />
-     - Запрещено снимать копирайт движка (ссылка внизу на Dcms-Social.ru) без наличия <a target="_blank" href="http://dcms-social.ru/plugins/rules/post.php?id=2">лицензии</a><br />
+	-   Об ошибках и недоработках просьба сообщать на <a target="_blank" href="https://dcms-social.ru/forum/">форум</a><br />
+     - Запрещено снимать копирайт движка (ссылка внизу на Dcms-Social.ru) без наличия <a target="_blank" href="https://dcms-social.ru/plugins/rules/post.php?id=2">лицензии</a><br />
 
 	</div>		<hr />	Для продолжения пользования данной версией нужно согласиться со следущим условием:<br /> <b>Обязуетесь ли вы не снимать копирайт без покупки лицензии?</b><br />
 <?
