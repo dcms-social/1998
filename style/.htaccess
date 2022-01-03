@@ -1,6 +1,46 @@
-Options -Indexes
-php_value engine off
-<Files *.php>
-order allow,deny
-deny from all
+Options -Indexes
+
+
+
+
+
+
+
+
+php_value engine off
+
+
+
+
+
+
+
+
+<Files *.php>
+
+
+
+
+
+
+
+
+order allow,deny
+
+
+
+
+
+
+
+
+deny from all
+
+
+
+
+
+
+
+
 </Files>

@@ -9,14 +9,14 @@
 }
 
 
-.table_info	/* Обрамление блока странички юзера */
+.table_info	/* пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ */
 {
 	vertical-align: top;	
 	word-wrap: break-word;
 
 }
 
-.block_menu	/* блок меню с аватаром */
+.block_menu	/* пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ */
 {	background: url(images/stripe2.png) white;	
 	vertical-align: top;	
 	background-color: #fff;	
@@ -25,7 +25,7 @@
 	width:200px;
 }
 
-.block_menu_nav	/* блок главного меню */
+.block_menu_nav	/* пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ */
 {	
 	vertical-align: top;	
 	text-align: left;	
@@ -39,7 +39,7 @@
 	word-wrap: break-word;
 }
 
-.block_info	/* блок вывода анкеты и стены */
+.block_info	/* пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ */
 {	
 	vertical-align: top;	
 	background: url(images/stripe2.png) white;
