@@ -130,4 +130,3 @@ echo '<img src="/style/icons/str.gif" alt="*"> <a href="index.php">Новост�
 echo '</div>';
 
 include_once TFOOT;
-?>
