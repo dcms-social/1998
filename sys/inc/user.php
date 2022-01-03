@@ -400,3 +400,12 @@ if ($_SERVER["REQUEST_URI"] == "/" or $_SERVER["REQUEST_URI"] == "/index.php") {
   }
 
 }
+
+
+if (empty(setget('job',1)))
+{
+  if ($user['level']<5 and  $_SERVER["REQUEST_URI"] != "/aut.php" and $_SERVER["REQUEST_URI"] != "/login.php")
+    exit("Идут технические работы");
+  else
+    echo "<div style='color:red'>Сайт выключен в админке. Пользователи видят сообщение о том что ведуться технмческие работы</div>";
+}

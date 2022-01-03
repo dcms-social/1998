@@ -33,13 +33,13 @@ if (!$set['web']) {
     ?>
     <div align="right">
       <img src="/style/icons/icon_stranica.gif" alt="DS"/>
-      <?= user::nick($user['id']) ?> | <a href="<?= I ?>/exit.php"><font color="#ff0000">Выход</font></a>
+      <?= user::nick($user['id']) ?> | <a href="/exit.php"><font color="#ff0000">Выход</font></a>
     </div>
     <?
   } else {
     ?>
     <div align="right">
-      <a href=<?= H ?>"/aut.php">Вход</a> | <a href="/reg.php">Регистрация</a>
+      <a href="/aut.php">Вход</a> | <a href="/reg.php">Регистрация</a>
     </div>
     <?
   }

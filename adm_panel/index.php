@@ -27,7 +27,7 @@ aut();
 echo "<div class='mess'>\n";
 echo "<center><b>DCMS-Social v.$set[dcms_version]</b></center>\n";
 
-  echo "<center><b>Официальный сайт поддержки <a href='https://dcms-social.ru'>https://dcms-social.ru</a></b></center>\n";echo "</div>\n";
+  echo "<center><b><span style='font-size:12px;'> Официальный сайт поддержки <a href='https://dcms-social.ru'>https://dcms-social.ru</a></span></b></center>\n";echo "</div>\n";
 
 
   $content = file_get_contents("https://dcms-social.ru/launcher/social.json");

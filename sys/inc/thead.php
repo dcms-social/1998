@@ -1,4 +1,50 @@
 <?
+if (setget('toolbar',1)==1)
+{
+?>
+<div class="toolbar">
+<div class="toolbar_inner"><a href="/">Главная</a>  |
+<a href="/adm_panel/">Админ панель</a> |
+  <a target="_blank" href="https://dcms-social.ru">DCMS-Social.ru</a>
+</div>
+</div>
+
+<style>
+  .toolbar {
+    position: fixed;
+    text-align: center;
+    vertical-align: middle;
+
+    color: #e07dc0;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin-bottom: 50px;
+
+    z-index: 9999;
+    border-bottom: 1px solid #656969;
+    width: 100%;
+
+    background: rgb(15, 15, 15);
+    height: 40px;
+
+  }
+  .toolbar_inner
+  {
+    display: inline-block;
+
+    vertical-align: middle;
+    text-align: center;
+  }
+
+html {
+
+  padding-top: 40px;
+}
+</style>
+<?php } ?>
+
+<?php
 $set['meta_keywords']=(isset($set['meta_keywords']))?$set['meta_keywords']:null;
 $set['meta_description']=(isset($set['meta_description']))?$set['meta_description']:null;
 
@@ -59,7 +105,11 @@ if (isset($_SESSION['err']))
 	echo '<div class="msg">' . $_SESSION['err'] . '</div>';
 	$_SESSION['err'] = NULL;
 }
+
+
 ?>
+
+
 <link rel="stylesheet" href="/style/system.css" type="text/css" />
 
     <div id="load"></div>

@@ -46,8 +46,9 @@ if (isset($_POST['save'])) {
 
   $temp_set['meta_keywords'] = esc(stripcslashes(htmlspecialchars($_POST['meta_keywords'])), 1);
   $temp_set['meta_description'] = esc(stripcslashes(htmlspecialchars($_POST['meta_description'])), 1);
-
+  $temp_set['toolbar'] = intval($_POST['toolbar']);
   $temp_set['exit'] = intval($_POST['exit']);
+  $temp_set['job'] = intval($_POST['job']);
   $temp_set['replace'] = intval($_POST['replace']);
   if ($_POST['replace'] != 1) {
 
@@ -82,6 +83,23 @@ echo "Название сайта:<br />\n<input name=\"title\" value=\"$temp_se
 echo "Пунктов на страницу:<br />\n<input name=\"p_str\" value=\"$temp_set[p_str]\" type=\"text\" /><br />\n";
 
 echo "Главная страница:<br />\n<input name=\"main\" value=\"".setget('main',"")."\" type=\"text\" /><br />\n";
+
+echo "Admin Toobar:<br />\n
+
+<select name='toolbar'>
+  <option ".(setget('toolbar',1)==1? " selected ":null)." value='1'>Да</option>
+  <option ".(setget('toolbar',1)==0? " selected ":null)." value='0'>Нет</option>
+</select>
+<br />\n";
+
+echo "Работа сайта:<br />\n
+
+<select name='job'>
+  <option ".(setget('job',1)==1? " selected ":null)." value='1'>Включено</option>
+  <option ".(setget('job',1)==0? " selected ":null)." value='0'>Выключено</option>
+</select>
+<br />\n";
+
 
 echo "Выход с подтверждением:<br />\n
 

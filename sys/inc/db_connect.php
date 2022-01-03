@@ -86,3 +86,4 @@ function db_optimize()
 		query("OPTIMIZE TABLE `$tables[0]`");
 	}
 }
+
