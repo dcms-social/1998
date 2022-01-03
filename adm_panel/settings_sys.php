@@ -13,63 +13,64 @@ include_once USER;
 adm_check();
 
 $set['title']='Настройки системы';
-include_once THEAD;
-title();
-if (isset($_POST['save']))
-{
+
+if (isset($_POST['save'])) {
 
 // ShaMan
-$temp_set['title']=esc(stripcslashes(htmlspecialchars($_POST['title'])),1);
+  $temp_set['title'] = esc(stripcslashes(htmlspecialchars($_POST['title'])), 1);
 // Тут конец моих дум
-$temp_set['mail_backup']=esc($_POST['mail_backup']);
-$temp_set['p_str']=intval($_POST['p_str']);
-dbquery("ALTER TABLE `user` CHANGE `set_p_str` `set_p_str` INT( 11 ) DEFAULT '$temp_set[p_str]'");
+  $temp_set['mail_backup'] = esc($_POST['mail_backup']);
+  $temp_set['p_str'] = intval($_POST['p_str']);
+  dbquery("ALTER TABLE `user` CHANGE `set_p_str` `set_p_str` INT( 11 ) DEFAULT '$temp_set[p_str]'");
 
 
-if (!preg_match('#\.\.#',$_POST['set_them']) && is_dir(H.'style/themes/'.$_POST['set_them']))
-{
-$temp_set['set_them']=$_POST['set_them'];
-dbquery("ALTER TABLE `user` CHANGE `set_them` `set_them` VARCHAR( 32 ) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT '$temp_set[set_them]'");
+  if (!preg_match('#\.\.#', $_POST['set_them']) && is_dir(H . 'style/themes/' . $_POST['set_them'])) {
+    $temp_set['set_them'] = $_POST['set_them'];
+    dbquery("ALTER TABLE `user` CHANGE `set_them` `set_them` VARCHAR( 32 ) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT '$temp_set[set_them]'");
+  }
+
+  if (!preg_match('#\.\.#', $_POST['set_them2']) && is_dir(H . 'style/themes/' . $_POST['set_them2'])) {
+    $temp_set['set_them2'] = $_POST['set_them2'];
+    dbquery("ALTER TABLE `user` CHANGE `set_them2` `set_them2` VARCHAR( 32 ) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT '$temp_set[set_them2]'");
+  }
+
+  if ($_POST['show_err_php'] == 1 || $_POST['show_err_php'] == 0) {
+    $temp_set['show_err_php'] = intval($_POST['show_err_php']);
+  }
+
+  if (isset($_POST['antidos']) && $_POST['antidos'] == 1)
+    $temp_set['antidos'] = 1; else $temp_set['antidos'] = 0;
+
+  if (isset($_POST['antimat']) && $_POST['antimat'] == 1)
+    $temp_set['antimat'] = 1; else $temp_set['antimat'] = 0;
+
+  $temp_set['meta_keywords'] = esc(stripcslashes(htmlspecialchars($_POST['meta_keywords'])), 1);
+  $temp_set['meta_description'] = esc(stripcslashes(htmlspecialchars($_POST['meta_description'])), 1);
+
+  $temp_set['exit'] = intval($_POST['exit']);
+  $temp_set['replace'] = intval($_POST['replace']);
+  if ($_POST['replace'] != 1) {
+
+  }
+
+
+  $temp_set['main'] = esc(stripcslashes(htmlspecialchars(($_POST['main']))));
+  $temp_set['header'] = esc(stripcslashes(htmlspecialchars(($_POST['header']))));
+  if (save_settings($temp_set)) {
+    admin_log('Настройки', 'Система', 'Изменение системных настроек');
+    msg('Настройки успешно приняты');
+  } else
+    $err = 'Нет прав для изменения файла настроек';
+
+  //header( "Location: " . $_SERVER [ "REQUEST_URI" ]);
+//exit();
+
+
+
+
 }
-
-if (!preg_match('#\.\.#',$_POST['set_them2']) && is_dir(H.'style/themes/'.$_POST['set_them2']))
-{
-$temp_set['set_them2']=$_POST['set_them2'];
-dbquery("ALTER TABLE `user` CHANGE `set_them2` `set_them2` VARCHAR( 32 ) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT '$temp_set[set_them2]'");
-}
-
-if ($_POST['show_err_php']==1 || $_POST['show_err_php']==0)
-{
-$temp_set['show_err_php']=intval($_POST['show_err_php']);
-}
-
-if (isset($_POST['antidos']) && $_POST['antidos']==1)
-$temp_set['antidos']=1; else $temp_set['antidos']=0;
-
-if (isset($_POST['antimat']) && $_POST['antimat']==1)
-$temp_set['antimat']=1; else $temp_set['antimat']=0;
-
-$temp_set['meta_keywords']=esc(stripcslashes(htmlspecialchars($_POST['meta_keywords'])),1);
-$temp_set['meta_description']=esc(stripcslashes(htmlspecialchars($_POST['meta_description'])),1);
-
-  $temp_set['exit']=intval($_POST['exit']);
-  $temp_set['replace']=intval($_POST['replace']);
-  $temp_set['header']=esc(stripcslashes(htmlspecialchars(($_POST['header']))));
-
-
-  header( "Location: " . $_SERVER [ "REQUEST_URI" ]);
-
-
-
-if (save_settings($temp_set))
-{
-admin_log('Настройки','Система','Изменение системных настроек');
-msg('Настройки успешно приняты');
-}
-
-else
-$err='Нет прав для изменения файла настроек';
-}
+include_once THEAD;
+title();
 err();
 aut();
 
@@ -79,6 +80,8 @@ echo "<form method=\"post\" action=\"?\">\n";
 
 echo "Название сайта:<br />\n<input name=\"title\" value=\"$temp_set[title]\" type=\"text\" /><br />\n";
 echo "Пунктов на страницу:<br />\n<input name=\"p_str\" value=\"$temp_set[p_str]\" type=\"text\" /><br />\n";
+
+echo "Главная страница:<br />\n<input name=\"main\" value=\"".setget('main',"")."\" type=\"text\" /><br />\n";
 
 echo "Выход с подтверждением:<br />\n
 
@@ -101,12 +104,15 @@ echo "Шапка сайта:<br />\n
 
 echo "  Установка плагинов через папку /Raplace/:<br />\n
 
-<select name='header'>
+<select name='replace'>
   <option ".(setget('replace',1)==1? " selected ":null)." value='1'>Включено</option>
   <option ".(setget('replace',1)==0? " selected ":null)." value='0'>Отключено</option>
 </select>
 
 <br />\n";
+
+
+
 
 
 echo "Тема (WAP):<br />\n<select name='set_them'>\n";

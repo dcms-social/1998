@@ -1,10 +1,12 @@
 <?
 include_once 'sys/inc/home.php';
 check_file(__FILE__);
-
 include_once INC;
 
-include_once check_replace('sys/inc/icons.php'); // Иконки главного меню
+
+
+
+    include_once check_replace('sys/inc/icons.php'); // Иконки главного меню
 include_once check_replace('sys/inc/thead.php'); // Иконки главного меню
 
 title();
@@ -33,7 +35,7 @@ if (!$set['web'])
 		?>
 		<div align="right">
 		<img src="/style/icons/icon_stranica.gif" alt="DS" />
-		<?=user::nick($user['id'])?> | <a href="exit.php"><font color="#ff0000">Выход</font></a>
+		<?=user::nick($user['id'])?> | <a href="<?=I?>/exit.php"><font color="#ff0000">Выход</font></a>
 		</div>
 		<?
 	}
@@ -41,7 +43,7 @@ if (!$set['web'])
 	{
 		?>
 		<div align="right">
-		<a href="/aut.php">Вход</a> | <a href="/reg.php">Регистрация</a>
+		<a href=<?=H?>"/aut.php">Вход</a> | <a href="/reg.php">Регистрация</a>
 		</div>
 		<?
 	}

@@ -28,8 +28,20 @@ echo "<div class='mess'>\n";
 echo "<center><b>DCMS-Social v.$set[dcms_version]</b></center>\n";
 
   echo "<center><b>Официальный сайт поддержки <a href='https://dcms-social.ru'>https://dcms-social.ru</a></b></center>\n";echo "</div>\n";
+
+
+  $content = file_get_contents("https://dcms-social.ru/launcher/social.json");
+  $data = json_decode($content, TRUE);
+
+  echo "	<div class='mess'> <font color='green'>Устаноленная версия: " . $set['dcms_version'] . " </font>		</div>	";
+  echo "	<div class='mess'> <font color='green'>Актуальная версия: " . $data['stable']['version'] . " </font>		</div>	";
+
+
+
+
   echo "<div class='main'><h4>Контент</h4></div>";
 
+  if (user_access('adm_info'))echo "<div class='main'><img src='/style/icons/str.gif' alt=''/> <a href='update.php'>Обновление</a></div>\n";
 
 if (user_access('adm_info'))echo "<div class='main'><img src='/style/icons/str.gif' alt=''/> <a href='info.php'>Общая информация</a></div>\n";
 if (user_access('adm_statistic'))echo "<div class='main'><img src='/style/icons/str.gif' alt=''/> <a href='statistic.php'>Статистика сайта</a></div>\n";
@@ -68,13 +80,14 @@ if (user_access('adm_ban_ip'))echo "<div class='main'><img src='/style/icons/str
 if (user_access('adm_mysql'))echo "<div class='main'><img src='/style/icons/str.gif' alt=''/> <a href='mysql.php'>MySQL запросы</a></div>\n";
 if (user_access('adm_mysql'))echo "<div class='main'><img src='/style/icons/str.gif' alt=''/> <a href='tables.php'>Заливка таблиц</a></div>\n";
 if (user_access('adm_themes'))echo "<div class='main'><img src='/style/icons/str.gif' alt=''/> <a href='themes.php'>Темы оформления</a></div>\n";
+  if(is_dir(H . 'sys/add/admin')) {
 
-$opdirbase=@opendir(H.'sys/add/admin');
-while ($filebase=@readdir($opdirbase))
-if (preg_match('#\.php$#i',$filebase))
-include_once(H.'sys/add/admin/'.$filebase);
-closedir($opdirbase);
-
+    $opdirbase = opendir(H . 'sys/add/admin');
+    while ($filebase = readdir($opdirbase))
+      if (preg_match('#\.php$#i', $filebase))
+        include_once(H . 'sys/add/admin/' . $filebase);
+    closedir($opdirbase);
+  }
 }
 else
 {

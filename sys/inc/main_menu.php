@@ -10,7 +10,7 @@ while ($post_menu = dbassoc($q_menu))
 	echo '<img src="/style/icons/' . $post_menu['icon'] . '" alt="*" /> ';
 
 	if ($post_menu['type'] == 'link')
-	echo '<a href="' . $post_menu['url'] . '">';
+	echo '<a href="' .I. $post_menu['url'] . '">';
 	else 
 	echo '<div class="menu_razd">';
 	
@@ -31,7 +31,7 @@ if (user_access('adm_panel_show'))
 {
 	?>
 	<div class="main2">
-	<img src="/style/icons/adm.gif" alt="DS" /> <a href="/plugins/admin/">Админ кабинет</a> 
+	<img src="<?=I?>/style/icons/adm.gif" alt="DS" /> <a href="<?=I?>/plugins/admin/">Админ кабинет</a>
 	<?
   include_once check_replace(H.'plugins/admin/count.php');
 	?>

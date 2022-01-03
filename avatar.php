@@ -48,7 +48,7 @@ aut();
 
 	echo "<div class='main'>";
 
-	echo avatar($ank['id'], true, 128, false);
+	echo avatar($user['id'], true, 128, false);
 
 	echo "</div>";
 

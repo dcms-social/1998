@@ -389,4 +389,14 @@ while ($filebase = readdir($opdirbase)) {
     require_once(check_replace(H . 'sys/inc/plugins/' . $filebase));
   }
 }
-?>
+
+
+if ($_SERVER["REQUEST_URI"] == "/" or $_SERVER["REQUEST_URI"] == "/index.php") {
+
+  if (!empty(setget('main', "")) and setget('main', "") != "index" and setget('main', "") != "index.php") {
+
+    header("Location: " . setget('main', ""));
+    exit("11");
+  }
+
+}

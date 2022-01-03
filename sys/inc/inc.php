@@ -1,5 +1,4 @@
 <?
-
 include_once 'sys/inc/home.php';
 include_once 'sys/inc/start.php';
 
