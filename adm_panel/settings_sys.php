@@ -59,12 +59,12 @@ if (isset($_POST['save'])) {
   $temp_set['header'] = esc(stripcslashes(htmlspecialchars(($_POST['header']))));
   if (save_settings($temp_set)) {
     admin_log('Настройки', 'Система', 'Изменение системных настроек');
-    msg('Настройки успешно приняты');
+    msg2('Настройки успешно приняты');
   } else
     $err = 'Нет прав для изменения файла настроек';
 
-  //header( "Location: " . $_SERVER [ "REQUEST_URI" ]);
-//exit();
+  header( "Location: " . $_SERVER [ "REQUEST_URI" ]);
+exit();
 
 
 
