@@ -19,7 +19,7 @@ if (!defined("USER")) die('No access');
 
 if (isset($_GET['edit_folder']))
 {
-  $folder = dbassoc(dnquery("SELECT * FROM `user_files`  WHERE `id` = '".intval($_GET['edit_folder'])."' LIMIT 1"));
+  $folder = dbassoc(dbquery("SELECT * FROM `user_files`  WHERE `id` = '".intval($_GET['edit_folder'])."' LIMIT 1"));
 
   if ($folder['id_user'] != $user['id'] and !user_access('obmen_dir_edit'))
   {

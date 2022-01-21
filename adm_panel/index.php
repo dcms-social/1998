@@ -14,7 +14,7 @@ user_access('adm_panel_show',null,'/index.php?'.SID);
 		   
 if (isset($_SESSION['adm_auth']) && $_SESSION['adm_auth']>$time || isset($_SESSION['captcha']) && isset($_POST['chislo']) && $_SESSION['captcha']==$_POST['chislo'])
 {
-$_SESSION['adm_auth']=$time+1000;
+$_SESSION['adm_auth']=$time+setget("timeadmin",1000);
 
 if (isset($_GET['go']) && $_GET['go']!=null)
 {
@@ -39,7 +39,7 @@ echo "<center><b>DCMS-Social v.$set[dcms_version]</b></center>\n";
 
 
 
-  echo "<div class='main'><h4>Контент</h4></div>";
+  echo "<div class='mess'>Контент</div>";
 
   if (user_access('adm_info'))echo "<div class='main'><img src='/style/icons/str.gif' alt=''/> <a href='update.php'>Обновление</a></div>\n";
 
@@ -105,4 +105,3 @@ echo "</form>\n";
 }
 
 include_once TFOOT;
-?>

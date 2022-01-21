@@ -406,3 +406,171 @@ function ages($age)
   }
   return $age . ' ' . $str;
 }
+
+
+function t_toolbar_css ()
+{
+  ?>
+  <style>
+
+
+      .toolbar {
+          position: fixed;
+          text-align: center;
+          vertical-align: middle;
+
+          color: #e07dc0;
+          top: 0;
+          left: 0;
+          right: 0;
+          margin-bottom: 50px;
+
+          z-index: 9999;
+          border-bottom: 1px solid #656969;
+          width: 100%;
+
+          background: rgb(15, 15, 15);
+          height: 40px;
+
+      }
+      .toolbar_inner
+      {
+          display: inline-block;
+
+          vertical-align: middle;
+
+          text-align: center;
+      }
+
+      html {
+
+          padding-top: 40px;
+      }
+  </style>
+  <?php
+}
+function t_toolbar_html()
+{
+  ?>
+  <div class="toolbar">
+    <div class="toolbar_inner">
+      <span style="color: white">Admin Tool</span> ::
+      <a href="/">Главная</a>  |
+      <a href="/plugins/admin/">Админ разделы</a> |
+      <a href="/adm_panel/">Админ панель</a> |
+      <a target="_blank" href="https://dcms-social.ru">DCMS-Social.ru</a>
+    </div>
+  </div>
+  <?php
+}
+
+
+function new_token ()
+{
+    $token = random_bytes(15);
+    return bin2hex($token); // ffa7a910ca2dfce501b0d548605aaf
+
+}
+
+function token_p($token)
+{
+    if ($token===$_SESSION['token']) return true;
+    else
+    {
+        header("/");
+        exit("error token");
+
+    }
+}
+
+
+function set_token ()
+{
+
+    if (empty($_SESSION['token']))  $_SESSION['token'] = new_token();
+
+
+
+}
+function reset_token ()
+{
+
+    $_SESSION['token'] = new_token();
+
+
+}
+
+
+function check_token()
+{
+
+    add_header(token_js());
+
+    if (isset($_POST)&&!empty($_POST))
+    {
+        if (isset($_POST['token'])) token_p ($_POST['token']);
+        else
+        {
+            header("/");
+            exit("error token");
+        }
+    }
+
+}
+
+function add_header ($value)
+{
+    static $add;
+    return $add[]=$value;
+    header_html($add);
+
+}
+function header_html($add=null)
+{
+    static $header;
+    if ($add==null)
+    {
+        var_dump($header);
+        echo "".$header;
+    }
+    else $header = $add;
+}
+
+function token()
+{
+    return $_SESSION['token'];
+}
+function token_js()
+{
+    ob_start()
+?>
+
+  <script>
+
+
+      window.onload = function() {
+          form = document.querySelector('form');
+          var x = document.createElement("input");
+          x.setAttribute("type", "text");
+          x.setAttribute("value", "<?=token()?>");
+          x.setAttribute("name", "token");
+          form.appendChild(x);
+      }
+
+    </script>
+
+
+
+    <?php
+    $page = ob_get_contents();
+    ob_end_clean();
+
+
+return $page;
+
+}
+function token_form()
+{
+    echo '<input type="text" name="token" value="'.$_SESSION['token'].'">';
+
+}

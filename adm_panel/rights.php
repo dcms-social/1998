@@ -52,26 +52,26 @@ aut();
 
 
 if (isset($_GET['chmod_ok'])) {
-  @chmod(H . 'install/', 0777);
-  @chmod(H . 'sys/avatar/', 0777);
-  @chmod(H . 'sys/dat/', 0777);
-  @chmod(H . 'sys/forum/files', 0777);
-  @chmod(H . 'sys/gallery/48/', 0777);
-  @chmod(H . 'sys/gallery/50/', 0777);
-  @chmod(H . 'sys/gallery/128/', 0777);
-  @chmod(H . 'sys/gallery/640/', 0777);
-  @chmod(H . 'sys/gallery/foto/', 0777);
-  @chmod(H . 'sys/inc/', 0777);
-  @chmod(H . 'sys/fnc/', 0777);
-  @chmod(H . 'sys/obmen/files/', 0777);
-  @chmod(H . 'sys/obmen/screens/14/', 0777);
-  @chmod(H . 'sys/obmen/screens/48/', 0777);
-  @chmod(H . 'sys/obmen/screens/128/', 0777);
-  @chmod(H . 'sys/update/', 0777);
-  @chmod(H . 'sys/tmp/', 0777);
-  @chmod(H . 'style/themes/', 0777);
-  @chmod(H . 'style/smiles/', 0777);
-  @chmod(H . 'sys/gift/', 0777);
+  //chmod(H . 'install/', 0777);
+ // chmod(H . 'sys/avatar/', 0777);
+  chmod(H . 'sys/dat/', 0777);
+  chmod(H . 'sys/forum/files', 0777);
+  chmod(H . 'sys/gallery/48/', 0777);
+  chmod(H . 'sys/gallery/50/', 0777);
+  chmod(H . 'sys/gallery/128/', 0777);
+  chmod(H . 'sys/gallery/640/', 0777);
+  chmod(H . 'sys/gallery/foto/', 0777);
+  chmod(H . 'sys/inc/', 0777);
+  chmod(H . 'sys/fnc/', 0777);
+  chmod(H . 'sys/obmen/files/', 0777);
+  chmod(H . 'sys/obmen/screens/14/', 0777);
+  chmod(H . 'sys/obmen/screens/48/', 0777);
+  chmod(H . 'sys/obmen/screens/128/', 0777);
+  chmod(H . 'sys/update/', 0777);
+  chmod(H . 'sys/tmp/', 0777);
+  chmod(H . 'style/themes/', 0777);
+  chmod(H . 'style/smiles/', 0777);
+  chmod(H . 'sys/gift/', 0777);
   msg('Права успешно получены!');
 }
 echo "<form method='post' action='?chmod_ok'>";

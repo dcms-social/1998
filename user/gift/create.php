@@ -1,7 +1,6 @@
 <?
 
 
-
 /*
 
 
@@ -61,65 +60,40 @@ http://dcms-social.ru
 */
 
 
-
 include_once '../../sys/inc/start.php';
-
 
 
 include_once COMPRESS;
 
 
-
 include_once SESS;
-
 
 
 include_once '../../sys/inc/home.php';
 
 
-
 include_once SETTINGS;
-
 
 
 include_once DB_CONNECT;
 
 
-
 include_once IPUA;
-
 
 
 include_once FNC;
 
 
-
 include_once USER;
-
-
-
-
-
 
 
 only_reg();
 
 
-
 only_level(3);
 
 
-
-
-
-
-
 $width = ($webbrowser == 'web' ? '100' : '70'); // Размер подарков при выводе в браузер
-
-
-
-
-
 
 
 /*
@@ -141,1432 +115,733 @@ $width = ($webbrowser == 'web' ? '100' : '70'); // Размер подарков
 */
 
 
+if (isset($_GET['edit_gift']) && isset($_GET['category'])) {
 
-if (isset($_GET['edit_gift']) && isset($_GET['category']))
 
+    $category = dbassoc(dbquery("SELECT * FROM `gift_categories` WHERE `id` = '" . intval($_GET['category']) . "' LIMIT 1"));
 
 
-{
+    $gift = dbassoc(dbquery("SELECT * FROM `gift_list` WHERE `id` = '" . intval($_GET['edit_gift']) . "' LIMIT 1"));
 
 
+    if (!$category || !$gift) {
 
 
+        $_SESSION['message'] = 'Нет такой категории или подарка';
 
 
+        header("Location: ?");
 
-$category = dbassoc(dbquery("SELECT * FROM `gift_categories` WHERE `id` = '" . intval($_GET['category']) . "' LIMIT 1"));
 
+        exit;
 
 
-$gift = dbassoc(dbquery("SELECT * FROM `gift_list` WHERE `id` = '" . intval($_GET['edit_gift']) . "' LIMIT 1"));
+    }
 
 
 
 
+    if (isset($_POST['name']) && isset($_POST['money'])) // Редактирование записи
 
 
+    {
 
 
+        $name = my_esc($_POST['name']);
 
 
+        $money = intval($_POST['money']);
 
-if (!$category || !$gift) 
 
+        if ($money < 1) $err = 'Укажите стоимость подарка';
 
 
-{  
+        if (strlen2($name) < 2) $err = 'Короткое название';
 
 
+        if (strlen2($name) > 128) $err = 'Длина названия превышает предел в 128 символов';
 
-	$_SESSION['message'] = 'Нет такой категории или подарка';
 
+        if (!isset($err)) {
 
 
-	header("Location: ?");
+            dbquery("UPDATE `gift_list` SET `name` = '$name' , `money` = '$money', `id_category` = '$category[id]' WHERE `id` = '$gift[id]'");
 
 
+            $_SESSION['message'] = 'Подарок успешно отредактирован';
 
-	exit;
 
+            header('Location: ?category=' . $category['id'] . '&page=' . intval($_GET['page']));
 
 
-}
+            exit;
 
 
+        }
 
 
+    }
 
 
+    if (isset($_GET['delete'])) // Удаление подарка
 
-	if (isset($_POST['name']) && isset($_POST['money'])) // Редактирование записи
 
+    {
 
 
-	{
+        unlink(H . 'sys/gift/' . $gift['id'] . '.png');
 
 
+        dbquery("DELETE FROM `gift_list` WHERE `id` = '$gift[id]'");
 
-		$name = my_esc($_POST['name']);
 
+        dbquery("DELETE FROM `gifts_user` WHERE `id_gift` = '$gift[id]'");
 
 
-		$money = intval($_POST['money']);
+        $_SESSION['message'] = 'Подарок успешно удален';
 
 
+        header("Location: ?category=$category[id]&page=" . intval($_GET['page']));
 
-		
 
+        exit;
 
 
-		if ($money < 1)$err = 'Укажите стоимость подарка';
+    }
 
 
+    $set['title'] = 'Редактирование подарка';
 
-		
 
+    include_once THEAD;
 
 
-		if (strlen2($name) < 2)$err = 'Короткое название';
+    title();
 
 
+    aut();
 
-		if (strlen2($name) > 128)$err = 'Длина названия превышает предел в 128 символов';
 
+    err();
 
 
-		
+    echo '<div class="foot">';
 
 
+    echo '<img src="/style/icons/str2.gif" alt="*" />  <a href="?">Категории</a> |  <a href="?category=' . $category['id'] . '">' . htmlspecialchars($category['name']) . '</a> | <b>Добавление подарка</b><br />';
 
-		if (!isset($err))
 
-
-
-		{
-
-
-
-			dbquery("UPDATE `gift_list` SET `name` = '$name' , `money` = '$money', `id_category` = '$category[id]' WHERE `id` = '$gift[id]'");
-
-
-
-			
-
-
-
-			$_SESSION['message'] = 'Подарок успешно отредактирован';
-
-
-
-			header('Location: ?category=' . $category['id'] . '&page=' . intval($_GET['page']));
-
-
-
-			exit;
-
-
-
-		}
-
-
-
-	}
-
-
-
-	
-
-
-
-	if (isset($_GET['delete'])) // Удаление подарка
-
-
-
-	{
-
-
-
-
-
-
-
-		
-
-
-
-		unlink(H.'sys/gift/' . $gift['id'] . '.png');
-
-
-
-		
-
-
-
-		dbquery("DELETE FROM `gift_list` WHERE `id` = '$gift[id]'");
-
-
-
-		dbquery("DELETE FROM `gifts_user` WHERE `id_gift` = '$gift[id]'");
-
-
-
-		
-
-
-
-		$_SESSION['message'] = 'Подарок успешно удален';
-
-
-
-		
-
-
-
-		header("Location: ?category=$category[id]&page=" . intval($_GET['page']));
-
-
-
-		exit;
-
-
-
-	}
-
-
-
-
-
-
-
-	$set['title'] = 'Редактирование подарка';
-
-
-
-	include_once THEAD;
-
-
-
-	title();
-
-
-
-	aut();
-
-
-
-	err();
-
-
-
-	
-
-
-
-	echo '<div class="foot">';
-
-
-
-	echo '<img src="/style/icons/str2.gif" alt="*" />  <a href="?">Категории</a> |  <a href="?category=' . $category['id'] . '">' . htmlspecialchars($category['name']) . '</a> | <b>Добавление подарка</b><br />';	
-
-
-
-	echo '</div>';
-
-
-
-
-
+    echo '</div>';
 
 
 // Форма редактирования подарка
 
 
+    echo '<form class="main" method="post" enctype="multipart/form-data"  action="?category=' . $category['id'] . '&amp;edit_gift=' . $gift['id'] . '&amp;page=' . intval($_GET['page']) . '">';
 
 
+    echo '<img src="/sys/gift/' . $gift['id'] . '.png" style="max-width:' . $width . 'px;" alt="*" /><br />';
 
 
+    echo 'Название:<br /><input type="text" name="name" value="' . htmlspecialchars($gift['name']) . '" /><br />';
 
-	echo '<form class="main" method="post" enctype="multipart/form-data"  action="?category=' . $category['id'] . '&amp;edit_gift=' . $gift['id'] . '&amp;page=' . intval($_GET['page']) . '">';
 
+    echo 'Цена:<br /><input type="text" name="money" value="' . $gift['money'] . '" style="width:30px;"/><br />';
 
 
-	echo '<img src="/sys/gift/' . $gift['id'] . '.png" style="max-width:' . $width . 'px;" alt="*" /><br />';
+    echo '<input value="Сохранить" type="submit" />';
 
 
+    echo '</form>';
 
-	echo 'Название:<br /><input type="text" name="name" value="' . htmlspecialchars($gift['name']) . '" /><br />';
 
+    echo '<div class="foot">';
 
 
-	echo 'Цена:<br /><input type="text" name="money" value="' . $gift['money'] . '" style="width:30px;"/><br />';
+    echo '<img src="/style/icons/str2.gif" alt="*" />  <a href="?">Категории</a> |  <a href="?category=' . $category['id'] . '">' . htmlspecialchars($category['name']) . '</a> | <b>Добавление подарка</b><br />';
 
 
+    echo '</div>';
 
-	echo '<input value="Сохранить" type="submit" />';
 
+} else
 
 
-	echo '</form>';
+    /*
 
 
 
-	
+    ==================================
 
 
 
-	echo '<div class="foot">';
+    Добавление подарков
 
 
 
-	echo '<img src="/style/icons/str2.gif" alt="*" />  <a href="?">Категории</a> |  <a href="?category=' . $category['id'] . '">' . htmlspecialchars($category['name']) . '</a> | <b>Добавление подарка</b><br />';	
+    ==================================
 
 
 
-	echo '</div>';	
+    */
 
 
+    if (isset($_GET['add_gift']) && isset($_GET['category'])) {
 
-}
 
+        $category = dbassoc(dbquery("SELECT * FROM `gift_categories` WHERE `id` = '" . intval($_GET['category']) . "' LIMIT 1"));
 
 
+        if (!$category) {
 
 
+            $_SESSION['message'] = 'Нет такой категории';
 
 
-else 
+            header("Location: ?");
 
 
+            exit;
 
 
+        }
 
 
+        if (isset($_POST['name']) && isset($_POST['money']) && isset($_FILES['gift'])) // Создание записи
 
-/*
 
+        {
 
 
-==================================
+            $name = my_esc($_POST['name']);
 
 
+            $money = intval($_POST['money']);
 
-Добавление подарков
 
+            if ($money < 1) $err = 'Укажите стоимость подарка';
 
 
-==================================
+            if (strlen2($name) < 2) $err = 'Короткое название';
 
 
+            if (strlen2($name) > 128) $err = 'Длина названия превышает предел в 128 символов';
 
-*/
+            if ($_FILES['gift']['size'] <= 0) $err = 'Выберите изображение подарка';
+            if (!isset($err)) {
 
 
+                dbquery("INSERT INTO `gift_list` (`name`, `money`, `id_category`) values('$name', '$money', '$category[id]')");
 
-if (isset($_GET['add_gift']) && isset($_GET['category']))
 
+                $file_id = mysql_insert_id();
 
 
-{
+                copy($_FILES['gift']['tmp_name'], H . 'sys/gift/' . $file_id . '.png');
 
 
+                @chmod(H . 'sys/gift/' . $file_id . '.png', 0777);
 
 
+                $_SESSION['message'] = 'Подарок успешно добавлен';
 
 
+                header("Location: ?category=" . $category['id']);
 
-$category = dbassoc(dbquery("SELECT * FROM `gift_categories` WHERE `id` = '" . intval($_GET['category']) . "' LIMIT 1"));
 
+                exit;
 
 
+            }
 
 
+        }
 
 
+        $set['title'] = 'Добавление подарка';
 
 
+        include_once THEAD;
 
 
-if (!$category) 
+        title();
 
 
+        aut();
 
-{  
 
+        err();
 
 
-	$_SESSION['message'] = 'Нет такой категории';
+        echo '<div class="foot">';
 
 
+        echo '<img src="/style/icons/str2.gif" alt="*" />  <a href="?">Категории</a> |  <a href="?category=' . $category['id'] . '">' . htmlspecialchars($category['name']) . '</a> | <b>Добавление подарка</b><br />';
 
-	header("Location: ?");
 
-
-
-	exit;
-
-
-
-}
-
-
-
-
-
-
-
-	if (isset($_POST['name']) && isset($_POST['money']) && isset($_FILES['gift'])) // Создание записи
-
-
-
-	{
-
-
-
-		$name = my_esc($_POST['name']);
-
-
-
-		$money = intval($_POST['money']);
-
-
-
-		
-
-
-
-		if ($money < 1)$err = 'Укажите стоимость подарка';
-
-
-
-		
-
-
-
-		if (strlen2($name) < 2)$err = 'Короткое название';
-
-
-
-		if (strlen2($name) > 128)$err = 'Длина названия превышает предел в 128 символов';
-
-
-
-		
-
-
-
-		if (!isset($err))
-
-
-
-		{
-
-
-
-			dbquery("INSERT INTO `gift_list` (`name`, `money`, `id_category`) values('$name', '$money', '$category[id]')");
-
-
-
-			
-
-
-
-			$file_id = mysql_insert_id();
-
-
-
-			
-
-
-
-			copy($_FILES['gift']['tmp_name'], H.'sys/gift/' . $file_id . '.png');
-
-
-
-			@chmod(H.'sys/gift/' . $file_id . '.png' , 0777);
-
-
-
-			
-
-
-
-			$_SESSION['message'] = 'Подарок успешно добавлен';
-
-
-
-			header("Location: ?category=" . $category['id']);
-
-
-
-			exit;
-
-
-
-		}
-
-
-
-	}
-
-
-
-
-
-
-
-	$set['title'] = 'Добавление подарка';
-
-
-
-	include_once THEAD;
-
-
-
-	title();
-
-
-
-	aut();
-
-
-
-	err();
-
-
-
-
-
-
-
-	echo '<div class="foot">';
-
-
-
-	echo '<img src="/style/icons/str2.gif" alt="*" />  <a href="?">Категории</a> |  <a href="?category=' . $category['id'] . '">' . htmlspecialchars($category['name']) . '</a> | <b>Добавление подарка</b><br />';	
-
-
-
-	echo '</div>';
-
-
-
-
-
+        echo '</div>';
 
 
 // Форма создания категории
 
 
+        echo '<form class="main" method="post" enctype="multipart/form-data"  action="?category=' . $category['id'] . '&amp;add_gift">';
 
 
+        echo 'Название:<br /><input type="text" name="name" value="" /><br />';
 
 
+        echo 'Цена:<br /><input type="text" name="money" value="" style="width:30px;"/><br />';
 
-	echo '<form class="main" method="post" enctype="multipart/form-data"  action="?category=' . $category['id'] . '&amp;add_gift">';
 
+        echo 'Подарок:<br /><input name="gift" accept="image/*,image/png" type="file" /><br />';
 
 
-	echo 'Название:<br /><input type="text" name="name" value="" /><br />';
+        echo '<input value="Добавить" type="submit" />';
 
 
+        echo '</form>';
 
-	echo 'Цена:<br /><input type="text" name="money" value="" style="width:30px;"/><br />';
 
+        echo '<div class="foot">';
 
 
-	echo 'Подарок:<br /><input name="gift" accept="image/*,image/png" type="file" /><br />';
+        echo '<img src="/style/icons/str2.gif" alt="*" />  <a href="?">Категории</a> |  <a href="?category=' . $category['id'] . '">' . htmlspecialchars($category['name']) . '</a> | <b>Добавление подарка</b><br />';
 
 
+        echo '</div>';
 
-	echo '<input value="Добавить" type="submit" />';
 
+    } else
 
 
-	echo '</form>';
+        /*
 
 
 
-	
+        ==================================
 
 
 
-	echo '<div class="foot">';
+        Вывод подарков
 
 
 
-	echo '<img src="/style/icons/str2.gif" alt="*" />  <a href="?">Категории</a> |  <a href="?category=' . $category['id'] . '">' . htmlspecialchars($category['name']) . '</a> | <b>Добавление подарка</b><br />';	
+        ==================================
 
 
 
-	echo '</div>';
+        */
 
 
+        if (isset($_GET['category'])) {
 
-}
 
+            $category = dbassoc(dbquery("SELECT * FROM `gift_categories` WHERE `id` = '" . intval($_GET['category']) . "' LIMIT 1"));
 
 
+            if (!$category) {
 
 
+                $_SESSION['message'] = 'Нет такой категории';
 
 
-else
+                header("Location: ?");
 
 
+                exit;
 
 
+            }
 
 
+            $set['title'] = 'Список подарков';
 
-/*
 
+            include_once THEAD;
 
 
-==================================
+            title();
 
 
+            aut();
 
-Вывод подарков
 
+            err();
 
 
-==================================
+            echo '<div class="foot">';
 
 
+            echo '<img src="/style/icons/str2.gif" alt="*" />  <a href="?">Категории</a> | <b>' . htmlspecialchars($category['name']) . '</b><br />';
 
-*/
 
-
-
-
-
-
-
-if (isset($_GET['category'])){
-
-
-
-
-
-
-
-$category = dbassoc(dbquery("SELECT * FROM `gift_categories` WHERE `id` = '" . intval($_GET['category']) . "' LIMIT 1"));
-
-
-
-
-
-
-
-
-
-
-
-if (!$category) 
-
-
-
-{  
-
-
-
-	$_SESSION['message'] = 'Нет такой категории';
-
-
-
-	header("Location: ?");
-
-
-
-	exit;
-
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-	$set['title'] = 'Список подарков';
-
-
-
-	include_once THEAD;
-
-
-
-	title();
-
-
-
-	aut();
-
-
-
-	err();
-
-
-
-
-
-
-
-echo '<div class="foot">';
-
-
-
-echo '<img src="/style/icons/str2.gif" alt="*" />  <a href="?">Категории</a> | <b>' . htmlspecialchars($category['name']) . '</b><br />';	
-
-
-
-echo '</div>';
-
-
-
-	
-
+            echo '</div>';
 
 
 // Список подарков
 
 
+            $k_post = dbresult(dbquery("SELECT COUNT(id) FROM `gift_list`  WHERE `id_category` = '$category[id]'"), 0);
 
 
+            if ($k_post == 0) {
 
 
+                echo '<div class="mess">';
 
-	
 
+                echo 'Нет подарков';
 
 
-$k_post = dbresult(dbquery("SELECT COUNT(id) FROM `gift_list`  WHERE `id_category` = '$category[id]'"),0);
+                echo '</div>';
 
 
+            }
 
 
+            $k_page = k_page($k_post, $set['p_str']);
 
 
+            $page = page($k_page);
 
-if ($k_post == 0)
 
+            $start = $set['p_str'] * $page - $set['p_str'];
 
 
-{
+            $q = dbquery("SELECT name,id,money FROM `gift_list` WHERE `id_category` = '$category[id]' ORDER BY `id` LIMIT $start, $set[p_str]");
 
 
+            while ($post = dbassoc($q)) {
 
-	echo '<div class="mess">';
 
+                /*-----------зебра-----------*/
 
 
-	echo 'Нет подарков';
+                if ($num == 0) {
 
 
+                    echo '<div class="nav1">';
 
-	echo '</div>';
 
+                    $num = 1;
 
 
-}
+                } elseif ($num == 1) {
 
 
+                    echo '<div class="nav2">';
 
 
+                    $num = 0;
 
 
+                }
 
-$k_page=k_page($k_post,$set['p_str']);
 
+                /*---------------------------*/
 
 
-$page=page($k_page);
+                echo '<img src="/sys/gift/' . $post['id'] . '.png" style="max-width:' . $width . 'px;" alt="*" /><br />';
 
 
+                echo 'Название: ' . htmlspecialchars($post['name']) . '<br /> ';
 
-$start=$set['p_str']*$page-$set['p_str'];
 
+                echo 'Стоимость: ' . $post['money'] . ' ' . $sMonet[0];
 
 
-$q = dbquery("SELECT name,id,money FROM `gift_list` WHERE `id_category` = '$category[id]' ORDER BY `id` LIMIT $start, $set[p_str]");
+                echo ' <a href="create.php?category=' . $category['id'] . '&amp;edit_gift=' . $post['id'] . '&amp;page=' . $page . '"><img src="/style/icons/edit.gif" alt="*" /></a> ';
 
 
+                echo ' <a href="create.php?category=' . $category['id'] . '&amp;edit_gift=' . $post['id'] . '&amp;page=' . $page . '&amp;delete"><img src="/style/icons/delete.gif" alt="*" /></a> ';
 
 
+                echo '</div>';
 
 
+            }
 
 
+            if ($k_page > 1) str('create.php?category=' . intval($_GET['category']) . '&amp;', $k_page, $page); // Вывод страниц
 
 
+            echo '<div class="foot">';
 
-while ($post = dbassoc($q))
 
+            echo '<img src="/style/icons/ok.gif" alt="*" />  <a href="?category=' . $category['id'] . '&amp;add_gift">Добавить подарок</a><br />';
 
 
-{
+            echo '</div>';
 
 
+            echo '<div class="foot">';
 
 
+            echo '<img src="/style/icons/str2.gif" alt="*" />  <a href="?">Категории</a> | <b>' . htmlspecialchars($category['name']) . '</b><br />';
 
 
+            echo '</div>';
 
-/*-----------зебра-----------*/ 
 
+        } else
 
 
-	if ($num==0){
+            /*
 
 
 
-		echo '<div class="nav1">';
+            ==================================
 
 
 
-		$num=1;
+            Создание категорий
 
 
 
-	}
+            ==================================
 
 
 
-	elseif ($num==1){
+            */
 
 
+            if (isset($_GET['add_category'])) {
 
-		echo '<div class="nav2">';
 
+                if (isset($_POST['name']) && $_POST['name'] != NULL) // Создание записи
 
 
-		$num=0;
+                {
 
 
+                    $name = my_esc($_POST['name']);
 
-	}
 
+                    if (strlen2($name) < 2) $err = 'Короткое название';
 
 
-/*---------------------------*/
+                    if (strlen2($name) > 128) $err = 'Длина названия превышает предел в 128 символов';
 
 
+                    if (!isset($err)) {
 
 
+                        dbquery("INSERT INTO `gift_categories` (`name`) values('$name')");
 
 
+                        $_SESSION['message'] = 'Категория успешно добавлена';
 
-echo '<img src="/sys/gift/' . $post['id'] . '.png" style="max-width:' . $width . 'px;" alt="*" /><br />';
 
+                        header("Location: ?");
 
 
-echo 'Название: ' . htmlspecialchars($post['name']) . '<br /> ';
+                        exit;
 
 
+                    }
 
-echo 'Стоимость: ' . $post['money'] . ' ' . $sMonet[0];
 
+                }
 
 
-echo ' <a href="create.php?category=' . $category['id'] . '&amp;edit_gift=' . $post['id'] . '&amp;page=' . $page . '"><img src="/style/icons/edit.gif" alt="*" /></a> ';
+                $set['title'] = 'Создание категорий';
 
 
+                include_once THEAD;
 
-echo ' <a href="create.php?category=' . $category['id'] . '&amp;edit_gift=' . $post['id'] . '&amp;page=' . $page . '&amp;delete"><img src="/style/icons/delete.gif" alt="*" /></a> ';
 
+                title();
 
 
+                aut();
 
 
+                err();
 
 
+                echo '<div class="foot">';
 
 
+                echo '<img src="/style/icons/str2.gif" alt="*" />  <a href="?">Категории</a><br />';
 
 
-echo '</div>';
+                echo '</div>';
 
 
+                // Форма создания категории
 
-}
 
+                echo '<form class="main" method="post" action="?add_category">';
 
 
+                echo 'Название:<br /><input type="text" name="name" value="" /><br />';
 
 
+                echo '<input value="Добавить" type="submit" />';
 
 
-if ($k_page>1)str('create.php?category=' . intval($_GET['category']) . '&amp;',$k_page,$page); // Вывод страниц
+                echo '</form>';
 
 
+                echo '<div class="foot">';
 
 
+                echo '<img src="/style/icons/str2.gif" alt="*" />  <a href="?">Категории</a><br />';
 
 
+                echo '</div>';
 
-echo '<div class="foot">';
 
+            } else
 
 
-echo '<img src="/style/icons/ok.gif" alt="*" />  <a href="?category=' . $category['id'] . '&amp;add_gift">Добавить подарок</a><br />';	
+                /*
 
 
 
-echo '</div>';
+                ==================================
 
 
 
+                Редактирование категорий
 
 
 
+                ==================================
 
-echo '<div class="foot">';
 
 
+                */
 
-echo '<img src="/style/icons/str2.gif" alt="*" />  <a href="?">Категории</a> | <b>' . htmlspecialchars($category['name']) . '</b><br />';	
 
+                if (isset($_GET['edit_category'])) {
 
 
-echo '</div>';
+                    $category = dbassoc(dbquery("SELECT * FROM `gift_categories` WHERE `id` = '" . intval($_GET['edit_category']) . "' LIMIT 1"));
 
 
+                    if (!$category) {
 
 
+                        $_SESSION['message'] = 'Нет такой категории';
 
 
+                        header("Location: ?");
 
-}
 
+                        exit;
 
 
+                    }
 
 
+                    if (isset($_POST['name']) && $_POST['name'] != NULL) // Создание записи
 
 
-else
+                    {
 
 
+                        $name = my_esc($_POST['name']);
 
 
+                        if (strlen2($name) < 2) $err = 'Короткое название';
 
 
+                        if (strlen2($name) > 128) $err = 'Длина названия превышает предел в 128 символов';
 
-/*
 
+                        if (!isset($err)) {
 
 
-==================================
+                            dbquery("UPDATE `gift_categories` SET `name` = '$name' WHERE `id` = '$category[id]'");
 
 
+                            $_SESSION['message'] = 'Категория успешно переименована';
 
-Создание категорий
 
+                            header("Location: ?");
 
 
-==================================
+                            exit;
 
 
+                        }
 
-*/
 
+                    }
 
 
-if (isset($_GET['add_category']))
+                    if (isset($_GET['delete'])) // Удаление категории
 
 
+                    {
 
-{
 
+                        $q = dbquery("SELECT id FROM `gift_list` WHERE `id_category` = '$category[id]'");
 
 
+                        while ($post = dbassoc($q)) {
 
 
+                            unlink(H . 'sys/gift/' . $post['id'] . '.png');
 
 
-	if (isset($_POST['name']) && $_POST['name'] != NULL) // Создание записи
+                            dbquery("DELETE FROM `gifts_user` WHERE `id_gift` = '$post[id]'");
 
 
+                        }
 
-	{
 
+                        dbquery("DELETE FROM `gift_list` WHERE `id_category` = '$category[id]'");
 
 
-		$name = my_esc($_POST['name']);
+                        dbquery("DELETE FROM `gift_categories` WHERE `id` = '$category[id]' LIMIT 1");
 
 
+                        $_SESSION['message'] = 'Категория успешно удалена';
 
-		
 
+                        header("Location: ?");
 
 
-		if (strlen2($name) < 2)$err='Короткое название';
+                        exit;
 
 
+                    }
 
-		if (strlen2($name) > 128)$err='Длина названия превышает предел в 128 символов';
 
+                    $set['title'] = 'Редактирование категории';
 
 
-		
+                    include_once THEAD;
 
 
+                    title();
 
-		if (!isset($err))
 
+                    aut();
 
 
-		{
+                    err();
 
 
+                    // Форма редактирования категории
 
-			dbquery("INSERT INTO `gift_categories` (`name`) values('$name')");
 
+                    echo '<form class="main" method="post" action="?edit_category=' . $category['id'] . '">';
 
 
-			
+                    echo 'Название:<br /><input type="text" name="name" value="' . htmlspecialchars($category['name']) . '" /><br />';
 
 
+                    echo '<input value="Добавить" type="submit" />';
 
-			$_SESSION['message'] = 'Категория успешно добавлена';
 
+                    echo '</form>';
 
 
-			header("Location: ?");
-
-
-
-			exit;
-
-
-
-		}
-
-
-
-	}
-
-
-
-
-
-
-
-	$set['title'] = 'Создание категорий';
-
-
-
-	include_once THEAD;
-
-
-
-	title();
-
-
-
-	aut();
-
-
-
-	err();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	echo '<div class="foot">';
-
-
-
-	echo '<img src="/style/icons/str2.gif" alt="*" />  <a href="?">Категории</a><br />';	
-
-
-
-	echo '</div>';
-
-
-
-	
-
-
-
-	// Форма создания категории
-
-
-
-	echo '<form class="main" method="post" action="?add_category">';
-
-
-
-	echo 'Название:<br /><input type="text" name="name" value="" /><br />';
-
-
-
-	echo '<input value="Добавить" type="submit" />';
-
-
-
-	echo '</form>';
-
-
-
-	
-
-
-
-	echo '<div class="foot">';
-
-
-
-	echo '<img src="/style/icons/str2.gif" alt="*" />  <a href="?">Категории</a><br />';	
-
-
-
-	echo '</div>';
-
-
-
-}
-
-
-
-
-
-
-
-else
-
-
-
-
-
-
-
-/*
-
-
-
-==================================
-
-
-
-Редактирование категорий
-
-
-
-==================================
-
-
-
-*/
-
-
-
-if (isset($_GET['edit_category']))
-
-
-
-{
-
-
-
-
-
-
-
-$category = dbassoc(dbquery("SELECT * FROM `gift_categories` WHERE `id` = '" . intval($_GET['edit_category']) . "' LIMIT 1"));
-
-
-
-
-
-
-
-if (!$category) 
-
-
-
-{  
-
-
-
-	$_SESSION['message'] = 'Нет такой категории';
-
-
-
-	header("Location: ?");
-
-
-
-	exit;
-
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-	if (isset($_POST['name']) && $_POST['name'] != NULL) // Создание записи
-
-
-
-	{
-
-
-
-		$name = my_esc($_POST['name']);
-
-
-
-		
-
-
-
-		if (strlen2($name) < 2)$err='Короткое название';
-
-
-
-		if (strlen2($name) > 128)$err='Длина названия превышает предел в 128 символов';
-
-
-
-		
-
-
-
-		if (!isset($err))
-
-
-
-		{
-
-
-
-			dbquery("UPDATE `gift_categories` SET `name` = '$name' WHERE `id` = '$category[id]'");
-
-
-
-			
-
-
-
-			$_SESSION['message'] = 'Категория успешно переименована';
-
-
-
-			header("Location: ?");
-
-
-
-			exit;
-
-
-
-		}
-
-
-
-	}
-
-
-
-	
-
-
-
-	if (isset($_GET['delete'])) // Удаление категории
-
-
-
-	{
-
-
-
-
-
-
-
-		$q = dbquery("SELECT id FROM `gift_list` WHERE `id_category` = '$category[id]'");
-
-
-
-
-
-
-
-		while ($post = dbassoc($q))
-
-
-
-		{
-
-
-
-		unlink(H.'sys/gift/' . $post['id'] . '.png');
-
-
-
-		dbquery("DELETE FROM `gifts_user` WHERE `id_gift` = '$post[id]'");
-
-
-
-		}
-
-
-
-		
-
-
-
-		dbquery("DELETE FROM `gift_list` WHERE `id_category` = '$category[id]'");
-
-
-
-		
-
-
-
-		
-
-
-
-		dbquery("DELETE FROM `gift_categories` WHERE `id` = '$category[id]' LIMIT 1");	
-
-
-
-		
-
-
-
-		$_SESSION['message'] = 'Категория успешно удалена';
-
-
-
-		
-
-
-
-		header("Location: ?");
-
-
-
-		exit;
-
-
-
-	}
-
-
-
-	
-
-
-
-	
-
-
-
-	$set['title'] = 'Редактирование категории';
-
-
-
-	include_once THEAD;
-
-
-
-	title();
-
-
-
-	aut();
-
-
-
-	err();
-
-
-
-
-
-
-
-	// Форма редактирования категории
-
-
-
-
-
-
-
-	echo '<form class="main" method="post" action="?edit_category=' . $category['id'] . '">';
-
-
-
-	echo 'Название:<br /><input type="text" name="name" value="' . htmlspecialchars($category['name']) . '" /><br />';
-
-
-
-	echo '<input value="Добавить" type="submit" />';
-
-
-
-	echo '</form>';
-
-
-
-
-
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-else
-
-
-
-
-
-
-
-
-
-
-
-/*
+                } else /*
 
 
 
@@ -1582,228 +857,109 @@ else
 
 
 
-*/
+*/ {
 
 
+                    $set['title'] = 'Список категорий';
 
 
+                    include_once THEAD;
 
 
+                    title();
 
-{
 
+                    aut();
 
 
+                    err();
 
 
+// Список категорий
 
 
-	$set['title'] = 'Список категорий';
+                    $k_post = dbresult(dbquery("SELECT COUNT(id) FROM `gift_categories`"), 0);
 
 
+                    if ($k_post == 0) {
 
-	include_once THEAD;
 
+                        echo '<div class="mess">';
 
 
-	title();
+                        echo 'Нет категорий';
 
 
+                        echo '</div>';
 
-	aut();
 
+                    }
 
 
-	err();
+                    $q = dbquery("SELECT name,id FROM `gift_categories` ORDER BY `id`");
 
 
+                    while ($post = dbassoc($q)) {
 
 
+                        /*-----------зебра-----------*/
 
 
+                        if ($num == 0) {
 
-	
 
+                            echo '<div class="nav1">';
 
 
-// Список категорий	
+                            $num = 1;
 
 
+                        } elseif ($num == 1) {
 
 
+                            echo '<div class="nav2">';
 
 
+                            $num = 0;
 
-	
 
+                        }
 
 
-$k_post = dbresult(dbquery("SELECT COUNT(id) FROM `gift_categories`"),0);
+                        /*---------------------------*/
 
 
+                        echo '<img src="/style/themes/default/loads/14/dir.png" alt="*" /> <a href="create.php?category=' . $post['id'] . '">' . htmlspecialchars($post['name']) . '</a> ';
 
 
+                        echo '(' . dbresult(dbquery("SELECT COUNT(id) FROM `gift_list` WHERE `id_category` = '$post[id]'"), 0) . ')';
 
 
+                        echo ' <a href="create.php?edit_category=' . $post['id'] . '"><img src="/style/icons/edit.gif" alt="*" /></a> ';
 
-if ($k_post == 0)
 
+                        echo ' <a href="create.php?edit_category=' . $post['id'] . '&amp;delete"><img src="/style/icons/delete.gif" alt="*" /></a> ';
 
 
-{
+                        echo '</div>';
 
 
+                    }
 
-	echo '<div class="mess">';
 
+                    echo '<div class="foot">';
 
 
-	echo 'Нет категорий';
+                    echo '<img src="/style/icons/ok.gif" alt="*" />  <a href="?add_category">Создать категорию</a><br />';
 
 
+                    echo '</div>';
 
-	echo '</div>';
 
-
-
-}
-
-
-
-
-
-
-
-$q = dbquery("SELECT name,id FROM `gift_categories` ORDER BY `id`");
-
-
-
-
-
-
-
-while ($post = dbassoc($q))
-
-
-
-{
-
-
-
-
-
-
-
-/*-----------зебра-----------*/ 
-
-
-
-	if ($num==0){
-
-
-
-		echo '<div class="nav1">';
-
-
-
-		$num=1;
-
-
-
-	}
-
-
-
-	elseif ($num==1){
-
-
-
-		echo '<div class="nav2">';
-
-
-
-		$num=0;
-
-
-
-	}
-
-
-
-/*---------------------------*/
-
-
-
-
-
-
-
-echo '<img src="/style/themes/default/loads/14/dir.png" alt="*" /> <a href="create.php?category=' . $post['id'] . '">' . htmlspecialchars($post['name']) . '</a> ';
-
-
-
-echo '(' . dbresult(dbquery("SELECT COUNT(id) FROM `gift_list` WHERE `id_category` = '$post[id]'"),0) . ')';
-
-
-
-echo ' <a href="create.php?edit_category=' . $post['id'] . '"><img src="/style/icons/edit.gif" alt="*" /></a> ';
-
-
-
-echo ' <a href="create.php?edit_category=' . $post['id'] . '&amp;delete"><img src="/style/icons/delete.gif" alt="*" /></a> ';
-
-
-
-
-
-
-
-
-
-
-
-echo '</div>';
-
-
-
-}
-
-
-
-
-
-
-
-echo '<div class="foot">';
-
-
-
-echo '<img src="/style/icons/ok.gif" alt="*" />  <a href="?add_category">Создать категорию</a><br />';	
-
-
-
-echo '</div>';
-
-
-
-
-
-
-
-
-
-
-
-}
-
+                }
 
 
 include_once TFOOT;
-
-
-
-
-
 
 
 ?>

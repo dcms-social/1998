@@ -17,4 +17,4 @@ CREATE TABLE IF NOT EXISTS `forum_t` (
   PRIMARY KEY (`id`),
   KEY `id_forum` (`id_forum`,`id_razdel`),
   FULLTEXT KEY `name` (`name`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM  DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci AUTO_INCREMENT=2 ;

@@ -14,6 +14,8 @@ adm_check();
 
 $set['title']='Настройки системы';
 
+
+
 if (isset($_POST['save'])) {
 
 // ShaMan
@@ -45,9 +47,13 @@ if (isset($_POST['save'])) {
     $temp_set['antimat'] = 1; else $temp_set['antimat'] = 0;
 
   $temp_set['meta_keywords'] = esc(stripcslashes(htmlspecialchars($_POST['meta_keywords'])), 1);
+  $temp_set['background'] = esc(stripcslashes(htmlspecialchars($_POST['background'])), 1);
+
+
   $temp_set['meta_description'] = esc(stripcslashes(htmlspecialchars($_POST['meta_description'])), 1);
   $temp_set['toolbar'] = intval($_POST['toolbar']);
   $temp_set['exit'] = intval($_POST['exit']);
+  $temp_set['timeadmin'] = intval($_POST['timeadmin']);
   $temp_set['job'] = intval($_POST['job']);
   $temp_set['replace'] = intval($_POST['replace']);
   if ($_POST['replace'] != 1) {
@@ -75,22 +81,38 @@ title();
 err();
 aut();
 
-
-
 echo "<form method=\"post\" action=\"?\">\n";
+
 
 echo "Название сайта:<br />\n<input name=\"title\" value=\"$temp_set[title]\" type=\"text\" /><br />\n";
 echo "Пунктов на страницу:<br />\n<input name=\"p_str\" value=\"$temp_set[p_str]\" type=\"text\" /><br />\n";
 
 echo "Главная страница:<br />\n<input name=\"main\" value=\"".setget('main',"")."\" type=\"text\" /><br />\n";
 
-echo "Admin Toobar:<br />\n
+echo "Admin Toolbar:<br />\n
 
 <select name='toolbar'>
   <option ".(setget('toolbar',1)==1? " selected ":null)." value='1'>Да</option>
   <option ".(setget('toolbar',1)==0? " selected ":null)." value='0'>Нет</option>
 </select>
 <br />\n";
+
+
+
+echo "Время жизни админ сессии:<br />\n<input name=\"timeadmin\" value='".setget('timeadmin',1000)."' type=\"text\" /><br />\n";
+
+
+/*
+
+echo 'Фон сайта:<br />
+
+<input type="color"  name="background"
+           value="'.setget('background').'">
+
+<br />';
+
+*/
+
 
 echo "Работа сайта:<br />\n
 
@@ -119,8 +141,8 @@ echo "Шапка сайта:<br />\n
 
 <br />\n";
 
-
-echo "  Установка плагинов через папку /Raplace/:<br />\n
+/*
+echo "  Установка плагинов через папку /Replace/:<br />\n
 
 <select name='replace'>
   <option ".(setget('replace',1)==1? " selected ":null)." value='1'>Включено</option>
@@ -129,7 +151,7 @@ echo "  Установка плагинов через папку /Raplace/:<br 
 
 <br />\n";
 
-
+*/
 
 
 

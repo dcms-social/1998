@@ -1,4 +1,6 @@
 <?
+$url =   '/obmen' . $dir_id['dir'] . $file_id['id'] . '.' . $file_id['ras'] . '';
+
 if (test_file(H."sys/obmen/screens/128/$file_id[id].gif"))
 {
 	echo "<img src='/sys/obmen/screens/128/$file_id[id].gif' alt='scr...' /><br />\n";
@@ -31,7 +33,18 @@ elseif (class_exists('ffmpeg_movie'))
 		}
 	}
 }
+?>
+    <video controls width="100%" height="400">
+        <source src="<?=$url?>"><!-- MP4 для Safari, IE9, iPhone, iPad, Android, и Windows Phone 7 -->
 
+        </object>
+        Ваш бразур не поддерживает онлайн просмотр видео
+    </video>
+
+
+    </br>
+
+<?php
 if ($file_id['opis']!=NULL)
 {
 	echo "Описание: ";
@@ -55,6 +68,9 @@ if (class_exists('ffmpeg_movie'))
 	echo 'Время: '.intval($media->getDuration())." сек<br />\n";
 	echo "Битрейт: ".ceil(($media->getBitRate())/1024)." KBPS<br />\n";
 }
+
+
+
 
 echo "Добавлен: ".vremja($file_id['time'])."<br />\n";
 echo "Размер: ".size_file($size)."<br />\n";

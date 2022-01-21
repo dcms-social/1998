@@ -27,6 +27,8 @@ function test_chmod($df,$chmod)
 		echo '<span class="on">' . $show_df . ' (' . $n_chmod1 . $n_chmod2 . $n_chmod3 . ') : ' . 
 		$f_chmod1 . $f_chmod2 . $f_chmod3 . ' (ok)</span><br />';
 	}
+
+
 }
 
 if (file_exists(H.'install/'))

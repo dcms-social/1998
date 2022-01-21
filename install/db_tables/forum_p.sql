@@ -14,4 +14,4 @@ CREATE TABLE IF NOT EXISTS `forum_p` (
   KEY `id_razdel` (`id_razdel`),
   KEY `id_them` (`id_them`),
   FULLTEXT KEY `msg` (`msg`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;

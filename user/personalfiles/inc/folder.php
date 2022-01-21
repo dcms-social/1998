@@ -42,11 +42,13 @@ echo "<img src='/style/icons/up_dir.gif' alt='*'> ".($dir['osn']==1?'Файлы'
 echo "</div>";
 
 
+
  // Перемещение файла в другую папку
 if (isset($_GET['go']) && dbresult(dbquery("SELECT COUNT(*) FROM `obmennik_files` WHERE `id` = '".intval($_GET['go'])."'"),0)==1)
 {
-	$file_go = dbassoc(dbquery("SELECT * FROM `obmennik_files` WHERE `id` = '".intval($_GET['go'])."'"));
-	if (isset($_GET['ok']) && isset($_GET['ok']) && $ank['id'] == $user['id'])
+
+    $file_go = dbassoc(dbquery("SELECT * FROM `obmennik_files` WHERE `id` = '".intval($_GET['go'])."'"));
+	if (isset($_GET['ok']) && isset($_GET['ok']) && $file_go ['id_user'] == $user['id'])
 	{
 		dbquery("UPDATE `obmennik_files` SET `my_dir` = '$dir[id]' WHERE `id` = '$file_go[id]' LIMIT 1");
 		$_SESSION['message'] = 'Файл успешно перемещен';
@@ -81,12 +83,17 @@ exit;
 
 if (isset($_GET['go']))
 {
-	echo '<div class="foot">';
+    $file_go = dbassoc(dbquery("SELECT * FROM `obmennik_files` WHERE `id` = '".intval($_GET['go'])."'"));
+    if ($file_go ['id_user'] == $user['id'])
+    {
+    echo '<div class="foot">';
 	echo "<img src='/style/icons/ok.gif' alt='*'> <a href='/user/personalfiles/$ank[id]/$dir[id]/?go=$file_go[id]&amp;ok'>Переместить сюда</a>\n";
 	echo "</div>";
 	echo '<div class="mess">';
 	echo "Выбирете папку для файла\n";
 	echo "</div>";
+        }
+
 }
 
 if (isset($_SESSION['obmen_dir']) || isset($_GET['obmen_dir']))

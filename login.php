@@ -12,7 +12,7 @@ $show_all=true; // показ для всех
 $input_page=true;
 include_once USER;
 only_unreg();
-
+reset_token ();
 
 
 if (isset($_GET['id']) && isset($_GET['pass']))
